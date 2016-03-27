@@ -17,7 +17,7 @@ else()
 endif()
 
 # pull in headers for android
-if(ANDROID)
+if(0)
     #
     # work out where android headers and library are
     #

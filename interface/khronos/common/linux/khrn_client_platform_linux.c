@@ -768,6 +768,7 @@ static EGL_DISPMANX_WINDOW_T *check_default(EGLNativeWindowType win)
          case 4:
             x = dw/2; y = dh/2; width = dw/2; height = dh/2; layer = 0; break;
          case 5:
+	 default:
             x = 0;    y = 0;    width = dw;   height = dh;   layer = 0; break;
          }
 

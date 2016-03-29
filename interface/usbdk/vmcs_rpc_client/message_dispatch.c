@@ -664,7 +664,7 @@ static char *get_event_for(const char *name)
 	int fd;
 	for (i=0; i<8; i++)
 	{
-		sprintf(fname, "/dev/input/event%d", i);
+		snprintf(fname, 256, "/dev/input/event%d", i);
 		fd = open(fname, O_RDONLY|O_NONBLOCK);
       if (fd>=0) {
 			ioctl(fd, EVIOCGNAME(sizeof(buf)), buf);

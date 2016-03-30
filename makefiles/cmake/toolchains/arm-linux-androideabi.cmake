@@ -2,7 +2,9 @@
 
 set(BRILLO 1)
 SET(CMAKE_SYSTEM_NAME Linux)
-SET(ANDROID_TOOLCHAIN /chrome/brillo/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin)
+SET(ANDROID_ROOT $ENV{ANDROID_BUILD_TOP})
+SET(ANDROID_TOOLCHAIN $ENV{ANDROID_TOOLCHAIN})
+
 SET(CMAKE_C_COMPILER ${ANDROID_TOOLCHAIN}/arm-linux-androideabi-gcc)
 SET(CMAKE_CXX_COMPILER ${ANDROID_TOOLCHAIN}/arm-linux-androideabi-g++)
 SET(CMAKE_ASM_COMPILER ${ANDROID_TOOLCHAIN}/arm-linux-androideabi-gcc)
@@ -10,10 +12,12 @@ SET(CMAKE_SYSTEM_PROCESSOR arm)
 
 # avoids annoying and pointless warnings from gcc
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE")
-SET(CMAKE_SYSROOT "/chrome/brillo/out/target/product/gert/obj")
+
+# Root FS is not built until after 3rd-party apps
+SET(CMAKE_SYSROOT $ENV{ANDROID_PRODUCT_OUT}/obj/)
 SET(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -c")
-SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I/chrome/brillo/bionic/libc/include/")
-SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I/chrome/brillo/system/core/include/")
-SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I/chrome/brillo/bionic/libm/include/")
-SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I/chrome/brillo/bionic/libc/kernel/uapi/")
-SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I/chrome/brillo/bionic/libc/kernel/uapi/asm-arm/")
+SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I${ANDROID_ROOT}/bionic/libc/include/")
+SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I${ANDROID_ROOT}/system/core/include/")
+SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I${ANDROID_ROOT}/bionic/libm/include/")
+SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I${ANDROID_ROOT}/bionic/libc/kernel/uapi/")
+SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -I${ANDROID_ROOT}/bionic/libc/kernel/uapi/asm-arm/")

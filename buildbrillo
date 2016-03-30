@@ -1,30 +1,14 @@
 #!/bin/bash
 
-if [ "armv6l" = `arch` ] || [ "armv7l" = `arch` ]; then
-	# Native compile on the Raspberry Pi
-	mkdir -p build/raspberry/release
-	pushd build/raspberry/release
-	cmake -DCMAKE_BUILD_TYPE=Release ../../..
-	if [ "armv6l" = `arch` ]; then
-		make
-	else
-		make -j4
-	fi
-	if [ "$1" != "" ]; then
-	 sudo make install DESTDIR=$1
-	else
-	 sudo make install
-	fi
-else
-	# Cross compile on a more capable machine
-	mkdir -p build
-	pushd build
-	cmake -DCMAKE_TOOLCHAIN_FILE=../makefiles/cmake/toolchains/arm-linux-androideabi.cmake -DCMAKE_BUILD_TYPE=Release ../
-	make
+#export ANDROID_BUILD_TOP=/brillo/
+#export ANDROID_TOOLCHAIN=/brillo/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin
+#export ANDROID_PRODUCT_OUT=/brillo/out/target/product/gert/
 
-	if [ "$1" != "" ]; then
-	 sudo make install DESTDIR=$1
-	fi
-fi
+# Cross compile
+mkdir -p build/brillo/out
+pushd build/brillo/out
+cmake -DCMAKE_TOOLCHAIN_FILE=../../../makefiles/cmake/toolchains/arm-linux-androideabi.cmake -DCMAKE_BUILD_TYPE=Release ../../../
+make
+make install ${ANDROID_PRODUCT_OUT}/system
 popd
 

@@ -8,6 +8,7 @@
 mkdir -p build/brillo/out
 pushd build/brillo/out
 cmake -DCMAKE_TOOLCHAIN_FILE=../../../makefiles/cmake/toolchains/arm-linux-androideabi.cmake -DCMAKE_BUILD_TYPE=Release ../../../
+cmake -DCMAKE_TOOLCHAIN_FILE=../../../makefiles/cmake/toolchains/arm-linux-androideabi.cmake -DCMAKE_BUILD_TYPE=Release ../../../
 make
 make install DESTDIR=${ANDROID_PRODUCT_OUT}/obj/gentoo/root
 popd

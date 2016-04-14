@@ -25,7 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-// OpenGL|ES 2 demo using shader to compute mandelbrot/julia sets
+// OpenGL|ES 2 demo using shader to compute julia sets
 // Thanks to Peter de Rivas for original Python code
 
 #include <stdio.h>
@@ -62,30 +62,12 @@ typedef struct
    GLuint buf;
 // julia attribs
    GLuint unif_color, attr_vertex, unif_scale, unif_offset, unif_tex, unif_centre; 
-// mandelbrot attribs
-   GLuint attr_vertex2, unif_scale2, unif_offset2, unif_centre2;
 } CUBE_STATE_T;
 
 static CUBE_STATE_T _state, *state=&_state;
 
 #define check() assert(glGetError() == 0)
 
-static void showlog(GLint shader)
-{
-   // Prints the compile log for a shader
-   char log[1024];
-   glGetShaderInfoLog(shader,sizeof log,NULL,log);
-   printf("%d:shader:\n%s\n", shader, log);
-}
-
-static void showprogramlog(GLint shader)
-{
-   // Prints the information log for a program object
-   char log[1024];
-   glGetProgramInfoLog(shader,sizeof log,NULL,log);
-   printf("%d:program:\n%s\n", shader, log);
-}
-    
 /***********************************************************
  * Name: init_ogl
  *
@@ -214,40 +196,6 @@ static void init_shaders(CUBE_STATE_T *state)
               " gl_Position = pos;"
               " tcoord = vertex.xy*0.5+0.5;"
               "}";
-      
-   //Mandelbrot
-   const GLchar *mandelbrot_fshader_source =
-"uniform vec4 color;"
-"uniform vec2 scale;"
-"uniform vec2 centre;"
-"varying vec2 tcoord;"
-"void main(void) {"
-"  float intensity;"
-"  vec4 color2;"
-"  float cr=(gl_FragCoord.x-centre.x)*scale.x;"
-"  float ci=(gl_FragCoord.y-centre.y)*scale.y;"
-"  float ar=cr;"
-"  float ai=ci;"
-"  float tr,ti;"
-"  float col=0.0;"
-"  float p=0.0;"
-"  int i=0;"
-"  for(int i2=1;i2<16;i2++)"
-"  {"
-"    tr=ar*ar-ai*ai+cr;"
-"    ti=2.0*ar*ai+ci;"
-"    p=tr*tr+ti*ti;"
-"    ar=tr;"
-"    ai=ti;"
-"    if (p>16.0)"
-"    {"
-"      i=i2;"
-"      break;"
-"    }"
-"  }"
-"  color2 = vec4(float(i)*0.0625,0,0,1);"
-"  gl_FragColor = color2;"
-"}";
 
    // Julia
    const GLchar *julia_fshader_source =
@@ -284,8 +232,8 @@ static void init_shaders(CUBE_STATE_T *state)
 "      break;"
 "    }"
 "  }"
-"  color2 = vec4(0,float(i)*0.0625,0,1);"
-"  color2 = color2+texture2D(tex,t2);"
+"  p = float(i)*0.05;"
+"  color2 = vec4((1.2-p)*p,p,0.8-p,1);"
 "  gl_FragColor = color2;"
 "}";
 
@@ -294,56 +242,23 @@ static void init_shaders(CUBE_STATE_T *state)
         glCompileShader(state->vshader);
         check();
 
-        if (state->verbose)
-            showlog(state->vshader);
-            
         state->fshader = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(state->fshader, 1, &julia_fshader_source, 0);
         glCompileShader(state->fshader);
         check();
 
-        if (state->verbose)
-            showlog(state->fshader);
-
-        state->mshader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(state->mshader, 1, &mandelbrot_fshader_source, 0);
-        glCompileShader(state->mshader);
-        check();
-
-        if (state->verbose)
-            showlog(state->mshader);
-
-        // julia 
         state->program = glCreateProgram();
         glAttachShader(state->program, state->vshader);
         glAttachShader(state->program, state->fshader);
         glLinkProgram(state->program);
         check();
 
-        if (state->verbose)
-            showprogramlog(state->program);
-            
         state->attr_vertex = glGetAttribLocation(state->program, "vertex");
         state->unif_color  = glGetUniformLocation(state->program, "color");
         state->unif_scale  = glGetUniformLocation(state->program, "scale");
         state->unif_offset = glGetUniformLocation(state->program, "offset");
         state->unif_tex    = glGetUniformLocation(state->program, "tex");       
         state->unif_centre = glGetUniformLocation(state->program, "centre");
-
-        // mandelbrot
-        state->program2 = glCreateProgram();
-        glAttachShader(state->program2, state->vshader);
-        glAttachShader(state->program2, state->mshader);
-        glLinkProgram(state->program2);
-        check();
-
-        if (state->verbose)
-            showprogramlog(state->program2);
-            
-        state->attr_vertex2 = glGetAttribLocation(state->program2, "vertex");
-        state->unif_scale2  = glGetUniformLocation(state->program2, "scale");
-        state->unif_offset2 = glGetUniformLocation(state->program2, "offset");
-        state->unif_centre2 = glGetUniformLocation(state->program2, "centre");
         check();
    
         glClearColor ( 0.0, 1.0, 1.0, 1.0 );
@@ -384,29 +299,7 @@ static void init_shaders(CUBE_STATE_T *state)
         glEnableVertexAttribArray(state->attr_vertex);
         check();
 }
-
-
-static void draw_mandelbrot_to_texture(CUBE_STATE_T *state, GLfloat cx, GLfloat cy, GLfloat scale)
-{
-        // Draw the mandelbrot to a texture
-        glBindFramebuffer(GL_FRAMEBUFFER,state->tex_fb);
-        check();
-        glBindBuffer(GL_ARRAY_BUFFER, state->buf);
-        
-        glUseProgram ( state->program2 );
-        check();
-
-        glUniform2f(state->unif_scale2, scale, scale);
-        glUniform2f(state->unif_centre2, cx, cy);
-        check();
-        glDrawArrays ( GL_TRIANGLE_FAN, 0, 4 );
-        check();
-               
-        glFlush();
-        glFinish();
-        check();
-}
-        
+       
 static void draw_triangles(CUBE_STATE_T *state, GLfloat cx, GLfloat cy, GLfloat scale, GLfloat x, GLfloat y)
 {
         // Now render to the main frame buffer
@@ -441,39 +334,26 @@ static void draw_triangles(CUBE_STATE_T *state, GLfloat cx, GLfloat cy, GLfloat 
         check();
 }
 
-static int get_mouse(CUBE_STATE_T *state, int *outx, int *outy)
+static int get_mouse(int *outx, int *outy)
 {
-    static int fd = -1;
-    const int width=state->screen_width, height=state->screen_height;
-    static int x=800, y=400;
-    const int XSIGN = 1<<4, YSIGN = 1<<5;
-    if (fd<0) {
-       fd = open("/dev/input/mouse0",O_RDONLY|O_NONBLOCK);
-    }
-    if (fd>=0) {
-        struct {char buttons, dx, dy; } m;
-        while (1) {
-           int bytes = read(fd, &m, sizeof m);
-           if (bytes < (int)sizeof m) goto _exit;
-           if (m.buttons&8) {
-              break; // This bit should always be set
-           }
-           read(fd, &m, 1); // Try to sync up again
-        }
-        if (m.buttons&3)
-           return m.buttons&3;
-        x+=m.dx;
-        y+=m.dy;
-        if (m.buttons&XSIGN)
-           x-=256;
-        if (m.buttons&YSIGN)
-           y-=256;
-        if (x<0) x=0;
-        if (y<0) y=0;
-        if (x>width) x=width;
-        if (y>height) y=height;
-   }
-_exit:
+    const int width=1000, height=1000;
+    static int x=0, y=0, dx=7, dy=5;
+
+	x+=dx;
+	y+=dy;
+        if (x<width*2) {
+		x=width*2;
+		dx=+7; }
+        if (y<height*2) {
+		y=height*2;
+		dy=+5; }
+        if (x>width*5) {
+		x=width*5;
+		dx=-7;}
+        if (y>height*5) {
+		y=height*5;
+		dy=-5;}
+
    if (outx) *outx = x;
    if (outy) *outy = y;
    return 0;
@@ -496,13 +376,12 @@ int main ()
    cx = state->screen_width/2;
    cy = state->screen_height/2;
 
-   draw_mandelbrot_to_texture(state, cx, cy, 0.003);
    while (!terminate)
    {
       int x, y, b;
-      b = get_mouse(state, &x, &y);
+      b = get_mouse(&x, &y);
       if (b) break;
-      draw_triangles(state, cx, cy, 0.003, x, y);
+      draw_triangles(state, cx, cy, 0.004, x*cx/3000, y*cy/3000);
    }
    return 0;
 }

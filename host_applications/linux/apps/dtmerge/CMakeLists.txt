@@ -14,7 +14,7 @@ include_directories (
    ${VIDEOCORE_ROOT}/helpers/dtoverlay
 )
 
-add_executable(dtoverlay dtoverlay_main.c utils.c)
-target_link_libraries(dtoverlay dtovl)
+add_executable(dtmerge dtmerge.c)
+target_link_libraries(dtmerge dtovl)
 
-install(TARGETS dtoverlay RUNTIME DESTINATION bin)
+install(TARGETS dtmerge RUNTIME DESTINATION bin)

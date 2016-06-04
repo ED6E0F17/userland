@@ -6,6 +6,9 @@
 # have quite a few circular dependencies, and so the only way
 # to make it work seems to be to have everything static.
 
+
+add_definitions(-fno-strict-overflow)
+
 set(EGL_SOURCE
    egl/egl_client_config.c
    egl/egl_client_context.c
@@ -52,7 +55,7 @@ set(CLIENT_SOURCE
    common/khrn_client_pointermap.c
    common/khrn_client_vector.c
    common/khrn_int_hash.c
-   common/khrn_int_hash_asm.s
+#   common/khrn_int_hash_asm.s
    common/khrn_client_cache.c)
 
 add_library(EGL ${SHARED} ${EGL_SOURCE})
@@ -61,19 +64,12 @@ add_library(OpenVG ${SHARED} ${VG_SOURCE})
 add_library(WFC ${SHARED} ${WFC_SOURCE})
 add_library(khrn_client ${CLIENT_SOURCE})
 
-# TODO do we need EGL_static and GLESv2_static now that khrn_static exists?
-add_library(EGL_static STATIC ${EGL_SOURCE})
-add_library(GLESv2_static STATIC ${GLES_SOURCE})
-add_library(khrn_static STATIC
-   ${EGL_SOURCE} ${GLES_SOURCE} ${VG_SOURCE} ${WFC_SOURCE} ${CLIENT_SOURCE})
-
 target_link_libraries(EGL khrn_client vchiq_arm vcos bcm_host -lm)
 target_link_libraries(GLESv2 EGL khrn_client vcos)
 target_link_libraries(WFC EGL)
 target_link_libraries(OpenVG EGL)
 
 install(TARGETS EGL GLESv2 OpenVG WFC khrn_client DESTINATION lib)
-install(TARGETS EGL_static GLESv2_static khrn_static DESTINATION lib)
 
 # recommended names to use to avoid conflicts with mesa libs
 add_library(brcmEGL ${SHARED} ${EGL_SOURCE})

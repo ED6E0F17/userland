@@ -36,7 +36,8 @@ include_directories(host_support/include)
 
 # Global compiler flags
 if(CMAKE_COMPILER_IS_GNUCC)
-   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wall -Wno-unused-but-set-variable -fPIC")
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wall -Wno-undef -Wno-unused -Wno-attributes -fPIC")
+   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed")
 endif()
 
 add_definitions(-D_REENTRANT)
@@ -44,7 +45,6 @@ add_definitions(-DUSE_VCHIQ_ARM -DVCHI_BULK_ALIGN=1 -DVCHI_BULK_GRANULARITY=1)
 add_definitions(-DOMX_SKIP64BIT)
 add_definitions(-DEGL_SERVER_DISPMANX)
 add_definitions(-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64)
-add_definitions(-D_GNU_SOURCE)
 
 # do we actually need this?
 add_definitions(-D__VIDEOCORE4__)
@@ -72,7 +72,7 @@ endif()
 
 # VidTex supports Android and Linux
 if(BUILD_MMAL_APPS)
-add_subdirectory(host_applications/android/apps/vidtex)
+#add_subdirectory(host_applications/android/apps/vidtex)
 endif(BUILD_MMAL_APPS)
 
 add_subdirectory(middleware/openmaxil)

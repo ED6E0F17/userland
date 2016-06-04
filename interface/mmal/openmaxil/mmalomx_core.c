@@ -1143,7 +1143,7 @@ OMX_API OMX_ERRORTYPE OMX_APIENTRY MMALOMX_EXPORT(OMX_ComponentNameEnum)(
    if (nNameLength <= strlen(name) + strlen(prefix))
       return OMX_ErrorBadParameter;
 
-   sprintf(cComponentName, "%s%s", prefix, name);
+   snprintf(cComponentName, 127, "%s%s", prefix, name);
    LOG_TRACE("cComponentName: %s", cComponentName);
    return OMX_ErrorNone;
 }

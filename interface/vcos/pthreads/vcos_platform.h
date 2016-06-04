@@ -577,7 +577,7 @@ void vcos_event_signal(VCOS_EVENT_T *event)
       if (sem_post(&event->sem) != 0)
          goto fail_sem;
 
-   ok = 1;
+   ok += 1;
 fail_sem:
    vcos_mutex_unlock(&event->mutex);
 fail_mtx:

@@ -19,6 +19,10 @@ SET( GCC_COMPILER_FLAGS ${GCC_COMPILER_FLAGS} -Wno-unused-value )
 
 add_definitions( ${GCC_COMPILER_FLAGS} )
 
+if (CMAKE_COMPILER_IS_GNUCC)
+   add_definitions ( -D_GNU_SOURCE )
+endif ()
+
 # Containers core library
 set(core_SRCS ${core_SRCS} ${SOURCE_DIR}/core/containers.c)
 set(core_SRCS ${core_SRCS} ${SOURCE_DIR}/core/containers_io.c)

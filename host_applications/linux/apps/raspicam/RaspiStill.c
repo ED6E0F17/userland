@@ -46,9 +46,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * We use the RaspiCamControl code to handle the specific camera settings.
  */
 
-// We use some GNU extensions (asprintf, basename)
-#define _GNU_SOURCE
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>

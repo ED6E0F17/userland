@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#export ANDROID_BUILD_TOP=/brillo/
+#export ANDROID_TOOLCHAIN=/brillo/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin
+#export ANDROID_PRODUCT_OUT=/brillo/out/target/product/pete/
+
+# Cross compile
+mkdir -p build/brillo/out
+pushd build/brillo/out
+cmake -DCMAKE_TOOLCHAIN_FILE=../../../makefiles/cmake/toolchains/aarch64-linux-android.cmake -DCMAKE_BUILD_TYPE=Release ../../../
+cmake -DCMAKE_TOOLCHAIN_FILE=../../../makefiles/cmake/toolchains/aarch64-linux-android.cmake -DCMAKE_BUILD_TYPE=Release ../../../
+make
+#make install DESTDIR=${ANDROID_PRODUCT_OUT}/obj/gentoo/root
+popd
+

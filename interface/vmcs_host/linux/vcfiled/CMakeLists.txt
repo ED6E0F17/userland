@@ -1,6 +1,4 @@
 
-add_definitions(-Werror)
-
 # vcfiled - serves files to videocore. used for media handlers from
 # OpenMAX/IL and loading VLLs.
 add_executable(vcfiled vcfiled.c)

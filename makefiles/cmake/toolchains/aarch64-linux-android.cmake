@@ -11,7 +11,7 @@ SET(CMAKE_ASM_COMPILER ${ANDROID_TOOLCHAIN}/aarch64-linux-android-gcc)
 SET(CMAKE_SYSTEM_PROCESSOR arm64)
 
 # avoids annoying and pointless warnings from gcc
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG -U_FORTIFY_SOURCE")
 
 # Brillo will only run position independent code
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fPIE -pie")

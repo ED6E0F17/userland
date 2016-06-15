@@ -76,8 +76,8 @@ Local types and defines.
 ******************************************************************************/
 
 //#define DEBUG_LEVEL 1
-#define DEBUG_MINOR(...) vcos_log_info(__VA_ARGS__)
-#define DEBUG_MAJOR(...) vcos_log_warn(__VA_ARGS__)
+#define DEBUG_MINOR(...) ;
+#define DEBUG_MAJOR(...) ;
 
 /* Define a wrapper for the native directory handle which includes the path
  * to that directory (needed to retrieve size and attributes via stat()).

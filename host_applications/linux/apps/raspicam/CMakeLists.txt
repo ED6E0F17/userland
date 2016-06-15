@@ -1,8 +1,6 @@
 
 # raspistill/raspivid/raspiyuv
 
-SET(COMPILE_DEFINITIONS -Werror)
-
 include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/libs/bcm_host/include)
 include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/apps/raspicam/)
 

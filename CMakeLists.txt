@@ -36,7 +36,7 @@ include_directories(host_support/include)
 
 # Global compiler flags
 if(CMAKE_COMPILER_IS_GNUCC)
-   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wall -Wno-undef -Wno-unused-but-set-variable -fPIC")
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar -Wall -Wno-undef -Wno-unused -fPIC")
    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed")
 endif()
 
@@ -89,7 +89,7 @@ add_subdirectory(middleware/openmaxil)
 
 # FIXME: this directory needs a more sensible name and better
 # platform factoring
-add_subdirectory(interface/usbdk)
+# add_subdirectory(interface/usbdk)
 
 # FIXME: we should use a pre-packaged version of freetype
 # rather than the one included in the repo.

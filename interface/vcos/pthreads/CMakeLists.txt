@@ -31,7 +31,7 @@ if (BRILLO)
    target_link_libraries (vcos dl log)
 else ()
    add_library (vcos SHARED ${SOURCES})
-   target_link_libraries (vcos dl pthreads rt)
+   target_link_libraries (vcos dl pthread rt)
 endif ()
 
 

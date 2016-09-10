@@ -10,11 +10,3 @@ install(TARGETS vchiq_arm DESTINATION lib)
 
 include_directories(../..)
 
-add_executable(vchiq_test
-               vchiq_test.c)
-
-target_link_libraries(vchiq_test
-                      vchiq_arm
-                      vcos)
-
-install(TARGETS vchiq_test RUNTIME DESTINATION bin)

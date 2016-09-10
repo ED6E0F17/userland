@@ -39,6 +39,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "vc_vchi_filesys.h"
 #include "interface/vmcs_host/vc_vchi_fileservice_defs.h"
 
+#define DOWNCAST (unsigned)(uintptr_t)
+#define UPCAST   (uintptr_t)(unsigned)
+
 /******************************************************************************
 Global data.
 ******************************************************************************/
@@ -510,7 +513,7 @@ int vc_filesys_mount(const char *device, const char *mountpoint, const char *opt
       str[a+1+b] = 0;
       memcpy(str+a+b+2, options, c);
       str[a+b+c+2] = 0;
-      len = a + b + c + 3 + (int)(((FILESERV_MSG_T *)0)->data);
+      len = a + b + c + 3 + DOWNCAST (((FILESERV_MSG_T *)0)->data);
       len = ((len + (VCHI_BULK_GRANULARITY-1)) & ~(VCHI_BULK_GRANULARITY-1)) + VCHI_BULK_GRANULARITY;
       
       if (vchi_msg_stub(&vc_filesys_client.fileserv_msg, VC_FILESYS_MOUNT, len) == FILESERV_RESP_OK)
@@ -905,7 +908,7 @@ RETURNS
 
 int vc_filesys_closedir(void *dhandle)
 {
-   return vc_filesys_single_param((uint32_t)dhandle, VC_FILESYS_CLOSEDIR);
+   return vc_filesys_single_param(DOWNCAST dhandle, VC_FILESYS_CLOSEDIR);
 }
 
 
@@ -1104,7 +1107,7 @@ RETURNS
 
 void *vc_filesys_opendir(const char *dirname)
 {
-   return (void *) vc_filesys_single_string(0, dirname, VC_FILESYS_OPENDIR, 1);
+   return (void *)UPCAST vc_filesys_single_string(0, dirname, VC_FILESYS_OPENDIR, 1);
 }
 
 
@@ -1175,7 +1178,7 @@ struct dirent *vc_filesys_readdir_r(void *dhandle, struct dirent *result)
 
    if(lock_obtain() == 0)
    {
-      vc_filesys_client.fileserv_msg.params[0] = (uint32_t)dhandle;
+      vc_filesys_client.fileserv_msg.params[0] = DOWNCAST dhandle;
       if (vchi_msg_stub(&vc_filesys_client.fileserv_msg, VC_FILESYS_READDIR, 4) == FILESERV_RESP_OK)
       {
          fs_host_direntbytestream_interp(result, (void *)vc_filesys_client.fileserv_msg.data);
@@ -1902,7 +1905,7 @@ static int vc_fs_message_handler( FILESERV_MSG_T* msg, uint32_t nbytes )
 
       case VC_FILESYS_CLOSEDIR:
 
-         i = vc_hostfs_closedir((void *)msg->params[0]);
+         i = vc_hostfs_closedir((void *) UPCAST msg->params[0]);
          if (i != 0) {
             retval = FILESERV_RESP_ERROR;
          }
@@ -2014,9 +2017,9 @@ static int vc_fs_message_handler( FILESERV_MSG_T* msg, uint32_t nbytes )
 
       case VC_FILESYS_OPENDIR:
 
-         msg->params[0] = (uint32_t)vc_hostfs_opendir(
+         msg->params[0] = DOWNCAST vc_hostfs_opendir(
                                                       (const char *)msg->data);
-         if ((void *)msg->params[0] == NULL) {
+         if ((void *)UPCAST msg->params[0] == NULL) {
             retval = FILESERV_RESP_ERROR;
          }
          rlen = 4;
@@ -2031,7 +2034,7 @@ static int vc_fs_message_handler( FILESERV_MSG_T* msg, uint32_t nbytes )
 
             i = 0;
 
-            if(!vcos_verify(((int)vc_filesys_client.bulk_buffer & (VCHI_BULK_ALIGN-1)) == 0 &&
+            if(!vcos_verify((DOWNCAST vc_filesys_client.bulk_buffer & (VCHI_BULK_ALIGN-1)) == 0 &&
                             total_bytes <= FILESERV_MAX_BULK))
             {
                retval = FILESERV_RESP_ERROR;
@@ -2158,7 +2161,7 @@ static int vc_fs_message_handler( FILESERV_MSG_T* msg, uint32_t nbytes )
       case VC_FILESYS_READDIR:
          {
             struct dirent result;
-            if (vc_hostfs_readdir_r((void *)msg->params[0],
+            if (vc_hostfs_readdir_r((void *)UPCAST msg->params[0],
                                     &result) == NULL) {
                retval = FILESERV_RESP_ERROR;
                rlen = 4;

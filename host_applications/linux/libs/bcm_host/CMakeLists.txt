@@ -7,6 +7,7 @@ endif ()
 
 include_directories( ../../../.. 
 		     ../../../../interface/vcos/${VCOS_PLATFORM}
+		     ../../../../interface/vmcs_host
 		     ../../../../host_support/linux/added/include
 		     ../../../../host_applications/vmcs/test_apps/iltest
                      ../../../../host_applications/framework/common )

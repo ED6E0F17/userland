@@ -460,15 +460,15 @@ EGL_SURFACE_T *egl_surface_create(
       if (surface->buffers > 1) {
          uint64_t pid = rpc_get_client_id(thread);
          int sem[3];
-         sem[0] = (int)pid; sem[1] = (int)(pid >> 32); sem[2] = (int)name;
+         sem[0] = (int)pid; sem[1] = (int)(pid >> 32); sem[2] = (unsigned)(uintptr_t)name;
 
-         sem_name = (int)name;
+         sem_name = (unsigned)(uintptr_t)name;
          if (khronos_platform_semaphore_create(&surface->avail_buffers, sem, surface->buffers) == KHR_SUCCESS)
             surface->avail_buffers_valid = true;
       }
       if (sem_name == KHRN_NO_SEMAPHORE || surface->avail_buffers_valid) {
 #else
-      sem_name = (uint32_t)surface->internal_handle;
+      sem_name = (unsigned)(uintptr_t)surface->internal_handle;
       vcos_log_trace("Surface create has semaphore %X", sem_name);
 #endif
          uint32_t results[3];

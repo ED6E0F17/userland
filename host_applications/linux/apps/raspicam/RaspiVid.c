@@ -1107,7 +1107,7 @@ static void update_annotation_data(RASPIVID_STATE *state)
    if (state->camera_parameters.enable_annotate & ANNOTATE_APP_TEXT)
    {
       char *text;
-      char *refresh = raspicli_unmap_xref(state->intra_refresh_type, intra_refresh_map, intra_refresh_map_size);
+      const char *refresh = raspicli_unmap_xref(state->intra_refresh_type, intra_refresh_map, intra_refresh_map_size);
 
       asprintf(&text,  "%dk,%df,%s,%d,%s,%s",
             state->bitrate / 1000,  state->framerate,
@@ -1313,7 +1313,7 @@ static void encoder_buffer_callback(MMAL_PORT_T *port, MMAL_BUFFER_HEADER_T *buf
                     if(pData->pstate->frame==0)pData->pstate->starttime=buffer->pts;
                     pData->pstate->lasttime=buffer->pts;
                     pts = buffer->pts - pData->pstate->starttime;
-                    fprintf(pData->pts_file_handle,"%lld.%03lld\n", pts/1000, pts%1000);
+                    fprintf(pData->pts_file_handle,"%d.%03d\n", (int)(pts/1000), (int)(pts%1000));
                     pData->pstate->frame++;
                   }
                }

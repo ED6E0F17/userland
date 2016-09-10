@@ -102,7 +102,8 @@ void vc_container_log_vargs(VC_CONTAINER_T *ctx, VC_CONTAINER_LOG_TYPE_T type, c
    }
 #else
 #ifndef ENABLE_CONTAINERS_STANDALONE
-   vcos_vlog(format, args);
+   if (format && args)
+      vcos_vlog(format, args);
 #else
    vprintf(format, args); printf("\n");
    fflush(0);

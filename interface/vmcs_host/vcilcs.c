@@ -872,7 +872,7 @@ OMX_ERRORTYPE ilcs_pass_buffer(ILCS_SERVICE_T *st, IL_FUNCTION_T func, void *ref
       // walk down extra-data's appended to the buffer data to work out their length
       OMX_U8 *end = ptr + pBuffer->nAllocLen - pBuffer->nOffset;
       OMX_OTHER_EXTRADATATYPE *extra =
-         (OMX_OTHER_EXTRADATATYPE *) (((uint32_t) (ptr + pBuffer->nFilledLen + 3)) & ~3);
+         (OMX_OTHER_EXTRADATATYPE *) (((uintptr_t) (ptr + pBuffer->nFilledLen + 3)) & ~3);
       OMX_BOOL b_corrupt = OMX_FALSE;
       OMX_EXTRADATATYPE extra_type;
 
@@ -935,7 +935,7 @@ OMX_ERRORTYPE ilcs_pass_buffer(ILCS_SERVICE_T *st, IL_FUNCTION_T func, void *ref
          if(st->use_memmgr)
          {
             bulk_offset = (void *) (round_start-(ptr-pBuffer->nOffset));
-            mem_handle = (VCHI_MEM_HANDLE_T) pBuffer->pBuffer;
+            mem_handle = (VCHI_MEM_HANDLE_T)(unsigned)(uintptr_t) pBuffer->pBuffer;
          }
          else
             bulk_offset = (void *) round_start;
@@ -1017,8 +1017,8 @@ OMX_BUFFERHEADERTYPE *ilcs_receive_buffer(ILCS_SERVICE_T *st, void *call, int cl
 
       if(st->use_memmgr)
       {
-         mem_handle = (VCHI_MEM_HANDLE_T) pBuffer;
-         bulk_offset = (void*)(pHeader->nOffset + fixup->headerlen);
+         mem_handle = (VCHI_MEM_HANDLE_T)(unsigned)(uintptr_t) pBuffer;
+         bulk_offset = (void*)(uintptr_t)(unsigned)(pHeader->nOffset + fixup->headerlen);
       }
       else
          bulk_offset = dest + fixup->headerlen;

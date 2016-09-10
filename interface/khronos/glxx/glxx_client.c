@@ -1188,7 +1188,7 @@ static void draw_arrays_or_elements(CLIENT_THREAD_STATE_T *thread, GLXX_CLIENT_S
 
    if(type==0)
    {
-      first = (int)indices;
+      first = (unsigned)(uintptr_t)indices;
       indices_offset = first;
       indices_buffer = 0;
       send_indices = 0;
@@ -1211,7 +1211,7 @@ static void draw_arrays_or_elements(CLIENT_THREAD_STATE_T *thread, GLXX_CLIENT_S
       else
       {
          indices_key = 0;
-         indices_offset = (uint32_t)indices;
+         indices_offset = (unsigned)(uintptr_t)indices;
 
          if (cache_info.send_any)
             max = RPC_INT_RES(RPC_CALL3_RES(
@@ -1338,7 +1338,7 @@ GL_API void GL_APIENTRY glDrawArrays (GLenum mode, GLint first, GLsizei count)
    CLIENT_THREAD_STATE_T *thread = CLIENT_GET_THREAD_STATE();
    if (IS_OPENGLES_11_OR_20(thread)) {
       GLXX_CLIENT_STATE_T *state = GLXX_GET_CLIENT_STATE(thread);
-      draw_arrays_or_elements(thread, state, mode, count, 0, (void *)first);
+      draw_arrays_or_elements(thread, state, mode, count, 0, (void *)(uintptr_t)(unsigned)first);
    }
 }
 

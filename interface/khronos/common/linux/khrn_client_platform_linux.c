@@ -726,7 +726,7 @@ static EGL_DISPMANX_WINDOW_T default_dwin[NUM_WIN];
 
 static EGL_DISPMANX_WINDOW_T *check_default(EGLNativeWindowType win)
 {
-   int wid = (int)win;
+   int wid = (unsigned)(uintptr_t)win;
    if(wid>-NUM_WIN && wid <=0) {
       /*
        * Special identifiers indicating the default windows. Either use the

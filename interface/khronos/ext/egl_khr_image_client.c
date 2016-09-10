@@ -25,6 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#define DOWNCAST (unsigned)(uintptr_t)
 #define EGL_EGLEXT_PROTOTYPES /* we want the prototypes so the compiler will check that the signatures match */
 
 #define VCOS_LOG_CATEGORY (&egl_khr_image_client_log)
@@ -119,7 +120,7 @@ EGLAPI EGLImageKHR EGLAPIENTRY eglCreateImageKHR (EGLDisplay dpy, EGLContext ctx
                      {
                         //image.aux refers to a server side EGL surface 
                         //that already contains the data we're interested in
-                        buf[0] = (uint32_t)image.aux;
+                        buf[0] = DOWNCAST image.aux;
                         target = EGL_IMAGE_FROM_SURFACE_BRCM;
                         khrn_platform_release_pixmap_info((EGLNativePixmapType)buffer, &image);                        
                      }
@@ -141,7 +142,7 @@ EGLAPI EGLImageKHR EGLAPIENTRY eglCreateImageKHR (EGLDisplay dpy, EGLContext ctx
             } else if (target == EGL_IMAGE_WRAP_BRCM) {
                KHRN_IMAGE_WRAP_T *wrap_buffer = (KHRN_IMAGE_WRAP_T *)buffer;
 
-               buf[0] = (uint32_t)wrap_buffer->storage;
+               buf[0] = DOWNCAST wrap_buffer->storage;
                buffer_format = wrap_buffer->format;
                buffer_width = wrap_buffer->width;
                buffer_height = wrap_buffer->height;
@@ -151,7 +152,7 @@ EGLAPI EGLImageKHR EGLAPIENTRY eglCreateImageKHR (EGLDisplay dpy, EGLContext ctx
             } else if (target == EGL_IMAGE_WRAP_BRCM_BCG) {
                EGL_IMAGE_WRAP_BRCM_BCG_IMAGE_T *wrap_buffer = (EGL_IMAGE_WRAP_BRCM_BCG_IMAGE_T *)buffer;
 
-               buf[0] = (uint32_t)wrap_buffer->storage;
+               buf[0] = DOWNCAST wrap_buffer->storage;
                buffer_width = wrap_buffer->width;
                buffer_height = wrap_buffer->height;
                buffer_stride = wrap_buffer->stride;
@@ -183,7 +184,7 @@ EGLAPI EGLImageKHR EGLAPIENTRY eglCreateImageKHR (EGLDisplay dpy, EGLContext ctx
                /* These are shadow width/height and format, not to be confused with the
                   underlying formats configuration */
 
-               buf[0] = (uint32_t)khrn_hw_unaddr(((struct private_handle_t *)android_buffer->handle)->oglPhysicalAddress);
+               buf[0] = DOWNCAST khrn_hw_unaddr(((struct private_handle_t *)android_buffer->handle)->oglPhysicalAddress);
 
                buffer_format = ((struct private_handle_t *)android_buffer->handle)->oglFormat;
                buffer_width = android_buffer->width;
@@ -213,7 +214,7 @@ EGLAPI EGLImageKHR EGLAPIENTRY eglCreateImageKHR (EGLDisplay dpy, EGLContext ctx
                   /* just return the a copy of the EGLImageKHR gralloc created earlier
                      see hardware/broadcom/videocore/components/graphics/gralloc/ */
                   target = EGL_IMAGE_BRCM_DUPLICATE;
-                  buf[0] = (uint32_t)gralloc_private_handle_get_egl_image(gpriv);
+                  buf[0] = DOWNCAST gralloc_private_handle_get_egl_image(gpriv);
                   vcos_log_trace("%s: converting buffer %p egl_image %d to EGL_IMAGE_BRCM_DUPLICATE",
                         __FUNCTION__, buffer, buf[0]);
                }
@@ -241,25 +242,25 @@ EGLAPI EGLImageKHR EGLAPIENTRY eglCreateImageKHR (EGLDisplay dpy, EGLContext ctx
 #endif
 #else /* Not Android */
             } else if (target == EGL_IMAGE_BRCM_MULTIMEDIA) {
-                  buf[0] = (uint32_t)buffer;
+                  buf[0] = DOWNCAST buffer;
                   vcos_log_trace("%s: converting buffer handle %u to EGL_IMAGE_BRCM_MULTIMEDIA",
                         __FUNCTION__, buf[0]);
             } else if (target == EGL_IMAGE_BRCM_MULTIMEDIA_Y) {
-                  buf[0] = (uint32_t)buffer;
+                  buf[0] = DOWNCAST buffer;
                   vcos_log_trace("%s: converting buffer handle %u to EGL_IMAGE_BRCM_MULTIMEDIA_Y",
                         __FUNCTION__, buf[0]);
             } else if (target == EGL_IMAGE_BRCM_MULTIMEDIA_U) {
-                  buf[0] = (uint32_t)buffer;
+                  buf[0] = DOWNCAST buffer;
                   vcos_log_trace("%s: converting buffer handle %u to EGL_IMAGE_BRCM_MULTIMEDIA_U",
                         __FUNCTION__, buf[0]);
             } else if (target == EGL_IMAGE_BRCM_MULTIMEDIA_V) {
-                  buf[0] = (uint32_t)buffer;
+                  buf[0] = DOWNCAST buffer;
                   vcos_log_trace("%s: converting buffer handle %u to EGL_IMAGE_BRCM_MULTIMEDIA_V",
                         __FUNCTION__, buf[0]);
 #endif
             } else {
                vcos_log_trace("%s:target type %x buffer %p handled on server", __FUNCTION__, target, buffer);
-               buf[0] = (uint32_t)buffer;
+               buf[0] = DOWNCAST buffer;
             }
             if (buf_error) {
                thread->error = EGL_BAD_PARAMETER;

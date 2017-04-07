@@ -86,14 +86,14 @@ static EGL_SYNC_T *egl_sync_create(EGLSyncKHR sync, EGLenum type,
 
    sync_ptr->name[0] = (int)pid;
    sync_ptr->name[1] = (int)(pid >> 32);
-   sync_ptr->name[2] = (int)sync;
+   sync_ptr->name[2] = (unsigned)(uintptr_t)sync;
 
    if (khronos_platform_semaphore_create(&sync_ptr->master, sync_ptr->name, 0) != KHR_SUCCESS) {
       khrn_platform_free(sync_ptr);
       return 0;
    }
 
-   sem = (uint32_t) sync;
+   sem = (uint32_t)(uintptr_t) sync;
 #if SYNC_FENCE_KHR_SHORTCUT == 1
    if (type == EGL_SYNC_FENCE_KHR){
       RPC_CALL3(eglIntCreateSyncFence_impl,
@@ -143,7 +143,7 @@ static void egl_sync_term(EGL_SYNC_T *sync_master)
 static void egl_sync_destroy_iterator
    (KHRN_POINTER_MAP_T *sync_map, uint32_t sync, void *sync_handle, void *data)
 {
-   EGL_SYNC_T *sync_ptr = (EGL_SYNC_T *) sync;
+   EGL_SYNC_T *sync_ptr = (EGL_SYNC_T *)(uintptr_t) sync;
 
    UNUSED(sync_map);
    UNUSED(sync_handle);

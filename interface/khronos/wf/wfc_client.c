@@ -734,7 +734,7 @@ WFC_API_CALL void WFC_APIENTRY
       {
          case WFC_CONTEXT_BG_COLOR:
             if(vcos_verify(values != NULL) &&
-               vcos_verify(((uint32_t) values & 0x3) == 0) &&
+               vcos_verify(((uintptr_t)values & 0x3) == 0) &&
                vcos_verify(count == WFC_BG_CLR_SIZE))
             {
                for (i = 0; i < WFC_BG_CLR_SIZE; i++)
@@ -830,7 +830,7 @@ WFC_API_CALL void WFC_APIENTRY
       switch (attrib)
       {
          case WFC_CONTEXT_BG_COLOR:
-            if(vcos_verify((values != NULL) && (((uint32_t) values & 0x3) == 0)
+            if(vcos_verify((values != NULL) && (((uintptr_t)values & 0x3) == 0)
                && (count == WFC_BG_CLR_SIZE)))
             {
                for (i = 0; i < WFC_BG_CLR_SIZE; i++)

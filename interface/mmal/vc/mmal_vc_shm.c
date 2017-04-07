@@ -176,8 +176,8 @@ uint8_t *mmal_vc_shm_alloc(uint32_t size)
    vcsm_unlock_hdl(vcsm_handle);
 
    payload_elem->mem = mem;
-   payload_elem->handle = (void *)vcsm_handle;
-   payload_elem->vc_handle = (void *)vc_handle;
+   payload_elem->handle = (void *)(uintptr_t)(unsigned)vcsm_handle;
+   payload_elem->vc_handle = (void *)(uintptr_t)(unsigned)vc_handle;
 #else /* ENABLE_MMAL_VCSM */
    MMAL_PARAM_UNUSED(size);
    mmal_vc_payload_list_release(payload_elem);
@@ -193,7 +193,7 @@ MMAL_STATUS_T mmal_vc_shm_free(uint8_t *mem)
    if (payload_elem)
    {
 #ifdef ENABLE_MMAL_VCSM
-      vcsm_free((unsigned int)payload_elem->handle);
+      vcsm_free((unsigned)(uintptr_t)payload_elem->handle);
 #endif /* ENABLE_MMAL_VCSM */
       mmal_vc_payload_list_release(payload_elem);
       return MMAL_SUCCESS;
@@ -212,7 +212,7 @@ uint8_t *mmal_vc_shm_lock(uint8_t *mem, uint32_t workaround)
    if (elem) {
       mem = elem->mem;
 #ifdef ENABLE_MMAL_VCSM
-      void *p = vcsm_lock((unsigned int)elem->handle);
+      void *p = vcsm_lock((unsigned)(uintptr_t)elem->handle);
       if (!p)
          assert(0);
 #endif /* ENABLE_MMAL_VCSM */

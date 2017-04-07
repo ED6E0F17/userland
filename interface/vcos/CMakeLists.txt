@@ -43,7 +43,7 @@ foreach (header ${HEADERS})
 endforeach ()
 
 if (CMAKE_COMPILER_IS_GNUCC)
-   add_definitions (-ggdb -Werror -Wall)
+   add_definitions (-Wall -Wno-attributes -Werror)
 endif ()
 
 if (CMAKE_COMPILER_2005)

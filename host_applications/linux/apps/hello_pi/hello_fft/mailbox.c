@@ -37,12 +37,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "mailbox.h"
 
-#define PAGE_SIZE (4*1024)
-
 void *mapmem(unsigned base, unsigned size)
 {
    int mem_fd;
-   unsigned offset = base % PAGE_SIZE;
+   unsigned offset = base % ARM_PAGE_SIZE;
    base = base - offset;
    size = size + offset;
    /* open /dev/mem */
@@ -61,7 +59,7 @@ void *mapmem(unsigned base, unsigned size)
    printf("base=0x%x, mem=%p\n", base, mem);
 #endif
    if (mem == MAP_FAILED) {
-      printf("mmap error %d\n", (int)mem);
+      printf("mmap error %zu\n", (size_t)mem);
       exit (-1);
    }
    close(mem_fd);
@@ -70,7 +68,7 @@ void *mapmem(unsigned base, unsigned size)
 
 void unmapmem(void *addr, unsigned size)
 {
-   const intptr_t offset = (intptr_t)addr % PAGE_SIZE;
+   const intptr_t offset = (intptr_t)addr % ARM_PAGE_SIZE;
    addr = (char *)addr - offset;
    size = size + offset;
    int s = munmap(addr, size);

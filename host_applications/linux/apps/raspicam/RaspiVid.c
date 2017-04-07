@@ -1071,11 +1071,12 @@ static FILE *open_filename(RASPIVID_STATE *pState, char *filename)
 {
    FILE *new_handle = NULL;
    char *tempname = NULL;
+   int unused = 0;
 
    if (pState->segmentSize || pState->splitWait)
    {
       // Create a new filename string
-      asprintf(&tempname, filename, pState->segmentNumber);
+      unused += asprintf(&tempname, filename, pState->segmentNumber);
       filename = tempname;
    }
 
@@ -1231,8 +1232,9 @@ static void update_annotation_data(RASPIVID_STATE *state)
    {
       char *text;
       const char *refresh = raspicli_unmap_xref(state->intra_refresh_type, intra_refresh_map, intra_refresh_map_size);
+      int unused = 0;
 
-      asprintf(&text,  "%dk,%df,%s,%d,%s,%s",
+      unused += asprintf(&text,  "%dk,%df,%s,%d,%s,%s",
             state->bitrate / 1000,  state->framerate,
             refresh ? refresh : "(none)",
             state->intraperiod,
@@ -1453,7 +1455,7 @@ static void encoder_buffer_callback(MMAL_PORT_T *port, MMAL_BUFFER_HEADER_T *buf
                     if(pData->pstate->frame==0)pData->pstate->starttime=buffer->pts;
                     pData->pstate->lasttime=buffer->pts;
                     pts = buffer->pts - pData->pstate->starttime;
-                    fprintf(pData->pts_file_handle,"%lld.%03lld\n", pts/1000, pts%1000);
+                    fprintf(pData->pts_file_handle,"%d.%03d\n", (int)(pts/1000), (int)(pts%1000));
                     pData->pstate->frame++;
                   }
                }

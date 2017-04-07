@@ -58,15 +58,13 @@
 
 #ifdef __CHECKER__
 #define __force __attribute__((force))
-#define __bitwise __attribute__((bitwise))
 #else
 #define __force
-#define __bitwise
 #endif
 
-typedef uint16_t __bitwise fdt16_t;
-typedef uint32_t __bitwise fdt32_t;
-typedef uint64_t __bitwise fdt64_t;
+typedef uint16_t fdt16_t;
+typedef uint32_t fdt32_t;
+typedef uint64_t fdt64_t;
 
 //#define EXTRACT_BYTE(x, n)	((unsigned long long)((uint8_t *)&x)[n])
 // xxx work around a compiler bug...

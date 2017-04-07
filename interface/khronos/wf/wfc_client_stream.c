@@ -269,7 +269,7 @@ uint32_t wfc_stream_create_req_rect
    // Create thread for handling server-side request to change source
    // and/or destination rectangles. One per stream (if enabled).
    VCOS_STATUS_T status = vcos_thread_create(&stream_ptr->rect_req_thread_data, "wfc_stream_rect_req_thread",
-      NULL, wfc_stream_rect_req_thread, (void *) stream);
+      NULL, wfc_stream_rect_req_thread, (void *)(uintptr_t) stream);
    vcos_demand(status == VCOS_SUCCESS);
 
    STREAM_UNLOCK(stream_ptr);
@@ -765,7 +765,7 @@ static void *wfc_stream_rect_req_thread(void *arg)
 //!@brief Thread for handling server-side request to change source and/or destination
 //! rectangles. One per stream (if enabled).
 {
-   WFCNativeStreamType stream = (WFCNativeStreamType) arg;
+   WFCNativeStreamType stream = (WFCNativeStreamType)(uintptr_t) arg;
 
    WFC_STREAM_REQ_RECT_CALLBACK_T callback;
    void *cb_args;

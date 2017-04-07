@@ -1853,6 +1853,7 @@ static VC_CONTAINER_STATUS_T seek_to_positions(VC_CONTAINER_T *p_ctx, uint64_t t
    VC_CONTAINER_STATUS_T status = VC_CONTAINER_SUCCESS;
 
    int64_t track_best_pts[ASF_TRACKS_MAX];
+   track_best_pts[0] = INT64_MAX;
 
    if (*p_time == 0)
    {

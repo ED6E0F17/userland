@@ -1188,7 +1188,9 @@ static VC_CONTAINER_STATUS_T mp4_writer_add_track( VC_CONTAINER_T *p_ctx, VC_CON
    case VC_CONTAINER_CODEC_JPEG:   type = VC_FOURCC('m','p','4','v'); break;
    case VC_CONTAINER_CODEC_H263:   type = VC_FOURCC('s','2','6','3'); break;
    case VC_CONTAINER_CODEC_H264:
-      if(format->codec_variant == VC_FOURCC('a','v','c','C')) type = VC_FOURCC('a','v','c','1'); break;
+      if(format->codec_variant == VC_FOURCC('a','v','c','C'))
+         type = VC_FOURCC('a','v','c','1');
+      break;
    case VC_CONTAINER_CODEC_MJPEG:  type = VC_FOURCC('j','p','e','g'); break;
    case VC_CONTAINER_CODEC_MJPEGA: type = VC_FOURCC('m','j','p','a'); break;
    case VC_CONTAINER_CODEC_MJPEGB: type = VC_FOURCC('m','j','p','b'); break;

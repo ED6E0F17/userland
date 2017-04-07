@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # include "vcos.h"
 #endif
 
-#ifdef __ANDROID__
+#if 0
 #define LOG_TAG "ContainersCore"
 #include <cutils/log.h>
 #endif
@@ -66,16 +66,13 @@ void vc_container_log_set_verbosity(VC_CONTAINER_T *ctx, uint32_t mask)
 void vc_container_log(VC_CONTAINER_T *ctx, VC_CONTAINER_LOG_TYPE_T type, const char *format, ...)
 {
    uint32_t verbosity = ctx ? ctx->priv->verbosity : verbosity_mask;
-   va_list args;
 
+   if (!format) return;
    // Optimise out the call to vc_container_log_vargs etc. when it won't do anything.
    if(!(type & verbosity)) return;
-
-   va_start( args, format );
-   vc_container_log_vargs(ctx, type, format, args);
-   va_end( args );
 }
 
+#if 0
 void vc_container_log_vargs(VC_CONTAINER_T *ctx, VC_CONTAINER_LOG_TYPE_T type, const char *format, va_list args)
 {
    uint32_t verbosity = ctx ? ctx->priv->verbosity : verbosity_mask;
@@ -109,3 +106,4 @@ void vc_container_log_vargs(VC_CONTAINER_T *ctx, VC_CONTAINER_LOG_TYPE_T type, c
 #endif
 #endif
 }
+#endif

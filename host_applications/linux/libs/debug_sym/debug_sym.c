@@ -626,7 +626,7 @@ static int AccessVideoCoreMemory( VC_MEM_ACCESS_HANDLE_T vcHandle,
     if (mem_op == READ_MEM && vcHandle->use_vc_mem)
     {
         DBG( "AccessVideoCoreMemory: %p, %x, %d", buf, origVcMemAddr, numBytes );
-        int s = vc_mem_copy(buf, (uint32_t)origVcMemAddr, numBytes);
+        int s = vc_mem_copy(buf, (uint32_t)(intptr_t)origVcMemAddr, numBytes);
         if (s == 0)
             return 1;
     }

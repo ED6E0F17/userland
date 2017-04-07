@@ -273,9 +273,7 @@ static KHRN_IMAGE_FORMAT_T convert_format(uint32_t format)
       case EGL_PIXEL_FORMAT_XRGB_8888_BRCM:     return XBGR_8888;
       case EGL_PIXEL_FORMAT_RGB_565_BRCM:       return RGB_565;
       case EGL_PIXEL_FORMAT_A_8_BRCM:           return A_8;
-      default:
-         vcos_assert(0);
-         return (KHRN_IMAGE_FORMAT_T)0;
+      default:                                  vcos_verify(0); return (KHRN_IMAGE_FORMAT_T)0;
    }
 }
 
@@ -728,7 +726,7 @@ static EGL_DISPMANX_WINDOW_T default_dwin[NUM_WIN];
 
 static EGL_DISPMANX_WINDOW_T *check_default(EGLNativeWindowType win)
 {
-   int wid = (int)win;
+   int wid = (unsigned)(uintptr_t)win;
    if(wid>-NUM_WIN && wid <=0) {
       /*
        * Special identifiers indicating the default windows. Either use the
@@ -772,6 +770,7 @@ static EGL_DISPMANX_WINDOW_T *check_default(EGLNativeWindowType win)
          case 4:
             x = dw/2; y = dh/2; width = dw/2; height = dh/2; layer = 0; break;
          case 5:
+	 default:
             x = 0;    y = 0;    width = dw;   height = dh;   layer = 0; break;
          }
 

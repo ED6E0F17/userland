@@ -1,10 +1,3 @@
-# MSVC5 does not fully support C99, enabling declaration-after-statement
-# warnings allows a common MSVC5 build error to be detected in Linux builds.
-if (CMAKE_COMPILER_IS_GNUCC)
-   set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wdeclaration-after-statement")
-   add_definitions (-D_GNU_SOURCE)
-endif ()
-
 set (HEADERS
    vcos_platform.h
    vcos_platform_types.h
@@ -33,12 +26,12 @@ set (SOURCES
    ../generic/vcos_generic_blockpool.c
 )
 
-if (VCOS_PTHREADS_BUILD_SHARED)
+if (BRILLO)
    add_library (vcos SHARED ${SOURCES})
-   target_link_libraries (vcos pthread dl rt)
+   target_link_libraries (vcos dl)
 else ()
-   add_library (vcos ${SOURCES})
-   target_link_libraries (vcos pthread rt)
+   add_library (vcos SHARED ${SOURCES})
+   target_link_libraries (vcos dl pthread rt)
 endif ()
 
 

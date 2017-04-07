@@ -69,7 +69,7 @@ void *video_decode_test(void* arg)
    TUNNEL_T tunnel[4];
    ILCLIENT_T *client;
    FILE *in;
-   int status = 0;
+   intptr_t status = 0;
    unsigned int data_len = 0;
 
    memset(list, 0, sizeof(list));

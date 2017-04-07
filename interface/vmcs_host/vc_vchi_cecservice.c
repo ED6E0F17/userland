@@ -741,12 +741,15 @@ VCHPRE_ int VCHPOST_ vc_cec_send_message(const uint32_t follower,
                    (payload)? payload[0] : 0xFF, length, (is_reply)? " as reply" : "");
 
    if(length > 0 && vcos_verify(payload)) {
-      char s[96] = {0}, *p = &s[0];
+      char s[96] = {0};
       int i;
+      size_t used = 0;
+
       vcos_memcpy(param.payload, payload, _min(length, CEC_MAX_XMIT_LENGTH));
-      p += sprintf(p, "0x%02X",  (cecservice_client.logical_address << 4) | (follower & 0xF));
+      used += snprintf(s, 96, "0x%02X",  (cecservice_client.logical_address << 4) | (follower & 0xF));
       for(i = 0; i < _min(length, CEC_MAX_XMIT_LENGTH); i++) {
-         p += sprintf(p, " %02X", payload[i]);
+         used += snprintf(s + used, 96 - used," %02X", payload[i]);
+
       }
       vc_cec_log_info("CEC message: %s", s);
    }

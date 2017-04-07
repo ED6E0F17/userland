@@ -45,7 +45,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Setting this define to zero on Pi 1 allows GPU_FFT and Open GL
 // to co-exist and also improves performance of longer transforms:
-#define GPU_FFT_USE_VC4_L2_CACHE 1 // Pi 1 only: cached=1; direct=0
+#define GPU_FFT_USE_VC4_L2_CACHE 0 // Pi 1 only: cached=1; direct=0
 
 #define GPU_FFT_NO_FLUSH 1
 #define GPU_FFT_TIMEOUT 2000 // ms
@@ -143,7 +143,7 @@ int gpu_fft_alloc (
     if (qpu_enable(mb, 1)) return -1;
 
     // Shared memory
-    handle = mem_alloc(mb, size, 4096, host.mem_flg);
+    handle = mem_alloc(mb, size, ARM_PAGE_SIZE, host.mem_flg);
     if (!handle) {
         qpu_enable(mb, 0);
         return -3;

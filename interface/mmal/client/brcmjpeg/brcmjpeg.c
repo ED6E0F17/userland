@@ -473,7 +473,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_encode(BRCMJPEG_T *ctx,
       {
          if (je->input_handle)
          {
-            in->data = (uint8_t *)je->input_handle;
+            in->data = (uint8_t *)(uintptr_t)(unsigned)je->input_handle;
             in->length = in->alloc_size = je->input_size;
          }
          else
@@ -632,7 +632,7 @@ static BRCMJPEG_STATUS_T brcmjpeg_decode(BRCMJPEG_T *ctx,
          {
             if (jd->output_handle)
             {
-               out->data = (uint8_t*)jd->output_handle;
+               out->data = (uint8_t*)(uintptr_t)(unsigned)jd->output_handle;
                out->alloc_size = jd->output_alloc_size;
             }
             status = mmal_port_send_buffer(port_out, out);

@@ -390,7 +390,7 @@ static void init_textures(CUBE_STATE_T *state)
                 state->display,
                 state->context,
                 EGL_GL_TEXTURE_2D_KHR,
-                (EGLClientBuffer)state->tex,
+                (EGLClientBuffer)(intptr_t)state->tex,
                 0);
     
    if (eglImage == EGL_NO_IMAGE_KHR)

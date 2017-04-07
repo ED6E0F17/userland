@@ -1049,21 +1049,8 @@ static int wait_for_next_frame(RASPISTILLYUV_STATE *state, int *frame)
          if (this_delay_ms < 0)
          {
             // We are already past the next exposure time
-            if (-this_delay_ms < -state->timelapse/2)
-            {
-               // Less than a half frame late, take a frame and hope to catch up next time
-               next_frame_ms += state->timelapse;
-               vcos_log_error("Frame %d is %d ms late", *frame, (int)(-this_delay_ms));
-            }
-            else
-            {
-               int nskip = 1 + (-this_delay_ms)/state->timelapse;
-               vcos_log_error("Skipping frame %d to restart at frame %d", *frame, *frame+nskip);
-               *frame += nskip;
-               this_delay_ms += nskip * state->timelapse;
-               vcos_sleep(this_delay_ms);
-               next_frame_ms += (nskip + 1) * state->timelapse;
-            }
+            next_frame_ms = current_time + state->timelapse;
+            vcos_log_error("Frame %d is %d ms late", *frame, (int)(-this_delay_ms));
          }
          else
          {

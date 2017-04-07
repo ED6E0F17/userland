@@ -42,5 +42,5 @@ install(FILES
 
 # Test apps
 if(BUILD_MMAL_APPS)
-add_subdirectory(test)
+#add_subdirectory(test)
 endif(BUILD_MMAL_APPS)

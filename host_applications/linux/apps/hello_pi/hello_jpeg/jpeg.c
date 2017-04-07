@@ -357,7 +357,7 @@ startupImageDecoder(OPENMAX_JPEG_DECODER * decoder)
 	(OMX_BUFFERHEADERTYPE **) malloc(sizeof(void) *
 					 decoder->inputBufferHeaderCount);
     // allocate each buffer
-    int             i;
+    intptr_t             i;
     for (i = 0; i < decoder->inputBufferHeaderCount; i++) {
 	if (OMX_AllocateBuffer(decoder->imageDecoder->handle,
 			       &decoder->ppInputBufferHeader[i],

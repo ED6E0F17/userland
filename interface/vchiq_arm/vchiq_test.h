@@ -77,8 +77,9 @@ struct test_params
       if (reason != _r) { \
          vcos_log_error("%d: expected callback reason " #_r ", got %d", __LINE__, reason); VCOS_BKPT; goto error_exit; \
       } \
-      else if ((int)VCHIQ_GET_SERVICE_USERDATA(service) != _u) { \
-         vcos_log_error("%d: expected userdata %d, got %d", __LINE__, _u, (int)VCHIQ_GET_SERVICE_USERDATA(service)); VCOS_BKPT; goto error_exit; \
+      else if ((intptr_t)VCHIQ_GET_SERVICE_USERDATA(service) != _u) { \
+         vcos_log_error("%d: expected userdata %d, got %d", __LINE__, _u, (intptr_t)VCHIQ_GET_SERVICE_USERDATA(service)); VCOS_BKPT; \
+         goto error_exit; \
       } \
       else \
       { \
@@ -90,11 +91,12 @@ struct test_params
       if (reason != _r) { \
          vcos_log_error("%d: expected callback reason " #_r ", got %d", __LINE__, reason); VCOS_BKPT; goto error_exit; \
       } \
-      else if ((int)VCHIQ_GET_SERVICE_USERDATA(service) != _u) { \
-         vcos_log_error("%d: expected userdata %d, got %d", __LINE__, _u, (int)VCHIQ_GET_SERVICE_USERDATA(service)); VCOS_BKPT; goto error_exit; \
+      else if ((intptr_t)VCHIQ_GET_SERVICE_USERDATA(service) != _u) { \
+         vcos_log_error("%d: expected userdata %d, got %d", __LINE__, _u, (intptr_t)VCHIQ_GET_SERVICE_USERDATA(service)); VCOS_BKPT; \
+         goto error_exit; \
       } \
-      else if ((int)bulk_userdata != _bu) { \
-         vcos_log_error("%d: expected bulk_userdata %d, got %d", __LINE__, _bu, (int)bulk_userdata); VCOS_BKPT; goto error_exit; \
+      else if ((intptr_t)bulk_userdata != _bu) { \
+         vcos_log_error("%d: expected bulk_userdata %d, got %d", __LINE__, _bu, (intptr_t)bulk_userdata); VCOS_BKPT; goto error_exit; \
       } \
       else \
       { \
@@ -110,8 +112,9 @@ struct test_params
       if (reason != _r) { \
          vcos_log_error("%d: expected callback reason " #_r ", got %d", __LINE__, reason); VCOS_BKPT; goto error_exit; \
       } \
-      else if ((int)VCHIQ_GET_SERVICE_USERDATA(service) != _u) { \
-         vcos_log_error("%d: expected userdata %d, got %d", __LINE__, _u, (int)VCHIQ_GET_SERVICE_USERDATA(service)); VCOS_BKPT; goto error_exit; \
+      else if ((intptr_t)VCHIQ_GET_SERVICE_USERDATA(service) != _u) { \
+         vcos_log_error("%d: expected userdata %d, got %d", __LINE__, _u, (intptr_t)VCHIQ_GET_SERVICE_USERDATA(service)); VCOS_BKPT; \
+         goto error_exit; \
       }
 
 #define START_BULK_CALLBACK(_r, _u, _bu)   \
@@ -119,11 +122,11 @@ struct test_params
       if (reason != _r) { \
          vcos_log_error("%d: expected callback reason " #_r ", got %d", __LINE__, reason); VCOS_BKPT; goto error_exit; \
       } \
-      else if ((int)VCHIQ_GET_SERVICE_USERDATA(service) != _u) { \
-         vcos_log_error("%d: expected userdata %d, got %d", __LINE__, _u, (int)VCHIQ_GET_SERVICE_USERDATA(service)); VCOS_BKPT; goto error_exit; \
+      else if ((intptr_t)VCHIQ_GET_SERVICE_USERDATA(service) != _u) { \
+         vcos_log_error("%d: expected userdata %d, got %d", __LINE__, _u, (intptr_t)VCHIQ_GET_SERVICE_USERDATA(service)); VCOS_BKPT; goto error_exit; \
       } \
-      else if ((int)bulk_userdata != _bu) { \
-         vcos_log_error("%d: expected bulkuserdata %d, got %d", __LINE__, _bu, (int)bulk_userdata); VCOS_BKPT; goto error_exit; \
+      else if ((intptr_t)bulk_userdata != _bu) { \
+         vcos_log_error("%d: expected bulkuserdata %d, got %d", __LINE__, _bu, (intptr_t)bulk_userdata); VCOS_BKPT; goto error_exit; \
       }
 
 #endif

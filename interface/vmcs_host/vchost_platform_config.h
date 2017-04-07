@@ -25,7 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#if defined(__unix__) && !defined(__ANDROID__)
+#if defined(__unix__)
 #include "linux/vchost_config.h"
 #else
 #include "vchost_config.h"

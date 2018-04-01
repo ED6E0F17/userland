@@ -36,23 +36,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define GPU_FFT_FWD 0 // forward FFT
 #define GPU_FFT_REV 1 // inverse FFT
 
+#include <stdint.h>
+
 struct GPU_FFT_COMPLEX {
     float re, im;
 };
 
 struct GPU_FFT_PTR {
-    unsigned vc;
+    uint32_t vc;
     union { struct GPU_FFT_COMPLEX *cptr;
             void                   *vptr;
             char                   *bptr;
             float                  *fptr;
-            unsigned               *uptr; } arm;
+            uint32_t               *uptr; } arm;
 };
 
 struct GPU_FFT_BASE {
     int mb;
     unsigned handle, size, vc_msg, vc_code, vc_unifs[GPU_FFT_QPUS], peri_size;
-    volatile unsigned *peri;
+    volatile uint32_t *peri;
 };
 
 struct GPU_FFT {

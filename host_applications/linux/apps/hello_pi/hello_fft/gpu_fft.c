@@ -30,7 +30,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "gpu_fft.h"
 
-#define GPU_FFT_BUSY_WAIT_LIMIT (5<<12) // ~1ms
+#define GPU_FFT_BUSY_WAIT_LIMIT 0
+	// (5<<12) // ~1ms
 
 typedef struct GPU_FFT_COMPLEX COMPLEX;
 
@@ -41,8 +42,9 @@ int gpu_fft_prepare(
     int jobs,       // number of transforms in batch
     struct GPU_FFT **fft) {
 
+    uint32_t *uptr;
     unsigned info_bytes, twid_bytes, data_bytes, code_bytes, unif_bytes, mail_bytes;
-    unsigned size, *uptr, vc_tw, vc_data;
+    unsigned size, vc_tw, vc_data;
     int i, q, shared, unique, passes, ret;
 
     struct GPU_FFT_BASE *base;
@@ -55,8 +57,8 @@ int gpu_fft_prepare(
     data_bytes = (1+((sizeof(COMPLEX)<<log2_N)|4095));
     code_bytes = gpu_fft_shader_size(log2_N);
     twid_bytes = sizeof(COMPLEX)*16*(shared+GPU_FFT_QPUS*unique);
-    unif_bytes = sizeof(int)*GPU_FFT_QPUS*(5+jobs*2);
-    mail_bytes = sizeof(int)*GPU_FFT_QPUS*2;
+    unif_bytes = sizeof(int32_t)*GPU_FFT_QPUS*(5+jobs*2);
+    mail_bytes = sizeof(int32_t)*GPU_FFT_QPUS*2;
 
     size  = info_bytes +        // header
             data_bytes*jobs*2 + // ping-pong data, aligned
@@ -105,7 +107,7 @@ int gpu_fft_prepare(
         *uptr++ = 0;
         *uptr++ = (q==0); // For mailbox: IRQ enable, master only
 
-        base->vc_unifs[q] = gpu_fft_ptr_inc(&ptr, sizeof(int)*(5+jobs*2));
+        base->vc_unifs[q] = gpu_fft_ptr_inc(&ptr, sizeof(int32_t)*(5+jobs*2));
     }
 
     if ((jobs<<log2_N) <= GPU_FFT_BUSY_WAIT_LIMIT) {

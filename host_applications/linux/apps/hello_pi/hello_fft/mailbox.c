@@ -91,17 +91,17 @@ static int mbox_property(int file_desc, void *buf)
    }
 
 #ifdef DEBUG
-   unsigned *p = buf; int i; unsigned size = *(unsigned *)buf;
+   uint32_t i, *p = (uint32_t *)buf, size = *(uint32_t *)buf;
    for (i=0; i<size/4; i++)
-      printf("%04x: 0x%08x\n", i*sizeof *p, p[i]);
+      printf("%04x: 0x%08x\n", i*4, p[i]);
 #endif
    return ret_val;
 }
 
 unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
 {
-   int i=0;
-   unsigned p[32];
+   uint32_t i=0;
+   uint32_t p[32];
    p[i++] = 0; // size
    p[i++] = 0x00000000; // process request
 
@@ -121,8 +121,8 @@ unsigned mem_alloc(int file_desc, unsigned size, unsigned align, unsigned flags)
 
 unsigned mem_free(int file_desc, unsigned handle)
 {
-   int i=0;
-   unsigned p[32];
+   uint32_t i=0;
+   uint32_t p[32];
    p[i++] = 0; // size
    p[i++] = 0x00000000; // process request
 
@@ -140,8 +140,8 @@ unsigned mem_free(int file_desc, unsigned handle)
 
 unsigned mem_lock(int file_desc, unsigned handle)
 {
-   int i=0;
-   unsigned p[32];
+   uint32_t i=0;
+   uint32_t p[32];
    p[i++] = 0; // size
    p[i++] = 0x00000000; // process request
 
@@ -159,8 +159,8 @@ unsigned mem_lock(int file_desc, unsigned handle)
 
 unsigned mem_unlock(int file_desc, unsigned handle)
 {
-   int i=0;
-   unsigned p[32];
+   uint32_t i=0;
+   uint32_t p[32];
    p[i++] = 0; // size
    p[i++] = 0x00000000; // process request
 
@@ -178,8 +178,8 @@ unsigned mem_unlock(int file_desc, unsigned handle)
 
 unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, unsigned r2, unsigned r3, unsigned r4, unsigned r5)
 {
-   int i=0;
-   unsigned p[32];
+   uint32_t i=0;
+   uint32_t p[32];
    p[i++] = 0; // size
    p[i++] = 0x00000000; // process request
 
@@ -203,8 +203,8 @@ unsigned execute_code(int file_desc, unsigned code, unsigned r0, unsigned r1, un
 
 unsigned qpu_enable(int file_desc, unsigned enable)
 {
-   int i=0;
-   unsigned p[32];
+   uint32_t i=0;
+   uint32_t p[32];
 
    p[i++] = 0; // size
    p[i++] = 0x00000000; // process request
@@ -222,8 +222,8 @@ unsigned qpu_enable(int file_desc, unsigned enable)
 }
 
 unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigned noflush, unsigned timeout) {
-   int i=0;
-   unsigned p[32];
+   uint32_t i=0;
+   uint32_t p[32];
 
    p[i++] = 0; // size
    p[i++] = 0x00000000; // process request

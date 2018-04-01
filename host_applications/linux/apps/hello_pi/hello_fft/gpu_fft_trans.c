@@ -30,7 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "gpu_fft_trans.h"
 
-static unsigned int shader_trans[1024] = {
+static uint32_t shader_trans[1024] = {
     #include "hex/shader_trans.hex"
 };
 

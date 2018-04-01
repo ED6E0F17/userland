@@ -135,7 +135,7 @@ int gpu_fft_alloc (
 
     struct GPU_FFT_HOST host;
     struct GPU_FFT_BASE *base;
-    volatile unsigned *peri;
+    volatile uint32_t *peri;
     unsigned handle;
 
     if (gpu_fft_get_host_info(&host)) return -5;
@@ -149,7 +149,7 @@ int gpu_fft_alloc (
         return -3;
     }
 
-    peri = (volatile unsigned *) mapmem(host.peri_addr, host.peri_size);
+    peri = (volatile uint32_t *) mapmem(host.peri_addr, host.peri_size);
     if (!peri) {
         mem_free(mb, handle);
         qpu_enable(mb, 0);

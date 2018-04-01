@@ -25,50 +25,51 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#include <stdint.h>
 
-static unsigned int shader_256[] = {
+static uint32_t shader_256[] = {
     #include "hex/shader_256.hex"
 };
-static unsigned int shader_512[] = {
+static uint32_t shader_512[] = {
     #include "hex/shader_512.hex"
 };
-static unsigned int shader_1k[] = {
+static uint32_t shader_1k[] = {
     #include "hex/shader_1k.hex"
 };
-static unsigned int shader_2k[] = {
+static uint32_t shader_2k[] = {
     #include "hex/shader_2k.hex"
 };
-static unsigned int shader_4k[] = {
+static uint32_t shader_4k[] = {
     #include "hex/shader_4k.hex"
 };
-static unsigned int shader_8k[] = {
+static uint32_t shader_8k[] = {
     #include "hex/shader_8k.hex"
 };
-static unsigned int shader_16k[] = {
+static uint32_t shader_16k[] = {
     #include "hex/shader_16k.hex"
 };
-static unsigned int shader_32k[] = {
+static uint32_t shader_32k[] = {
     #include "hex/shader_32k.hex"
 };
-static unsigned int shader_64k[] = {
+static uint32_t shader_64k[] = {
     #include "hex/shader_64k.hex"
 };
-static unsigned int shader_128k[] = {
+static uint32_t shader_128k[] = {
     #include "hex/shader_128k.hex"
 };
-static unsigned int shader_256k[] = {
+static uint32_t shader_256k[] = {
     #include "hex/shader_256k.hex"
 };
-static unsigned int shader_512k[] = {
+static uint32_t shader_512k[] = {
     #include "hex/shader_512k.hex"
 };
-static unsigned int shader_1024k[] = {
+static uint32_t shader_1024k[] = {
     #include "hex/shader_1024k.hex"
 };
-static unsigned int shader_2048k[] = {
+static uint32_t shader_2048k[] = {
     #include "hex/shader_2048k.hex"
 };
-static unsigned int shader_4096k[] = {
+static uint32_t shader_4096k[] = {
     #include "hex/shader_4096k.hex"
 };
 
